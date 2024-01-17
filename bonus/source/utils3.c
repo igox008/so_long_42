@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 03:04:57 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/16 01:22:43 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/18 00:18:24 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,46 +14,33 @@
 
 void	animate(int x, t_corr f, char *pt, t_data **i)
 {
-	mlx_image_t	*l;
-	mlx_image_t	*mv;
+	void	*l;
+	void	*mv;
 
-	l = get_image(*i, LAVA);
-	mv = get_image(*i, pt);
-	if (mlx_image_to_window((*i)->i, l, f.x * 64, f.y * 64) < 0)
-		mlx_fail(*i);
-	// mlx_do_sync((*i)->i->context);
-	if (mlx_image_to_window((*i)->i, mv, x, f.y * 64) < 0)
-		mlx_fail(*i);
-	mlx_flush_batch((mlx_ctx_t *)(*i)->i->context);
-	usleep(10000);
+	l = get_image(*i, LAVA, 64);
+	mv = get_image(*i, pt, 64);
+	mlx_put_image_to_window((*i)->ptr, (*i)->win, l, f.x * 64, f.y * 64);
+	mlx_put_image_to_window((*i)->ptr, (*i)->win, mv, x, f.y * 64);
+	mlx_do_sync((*i)->ptr);
+	// usleep(10000);
 	if (ft_strnstr(pt, "left", 200))
-	{
-		if (mlx_image_to_window((*i)->i, l, (f.x - 1) * 64,
-			f.y * 64) < 0)
-			mlx_fail(*i);
-	}
+		mlx_put_image_to_window((*i)->ptr, (*i)->win, l, (f.x - 1) * 64,f.y * 64);
 	else
-	{
-		if (mlx_image_to_window((*i)->i, l, (f.x + 1) * 64,
-			f.y * 64) < 0)
-			mlx_fail(*i);
-	}
+		mlx_put_image_to_window((*i)->ptr, (*i)->win, l, (f.x + 1) * 64,f.y * 64);
 }
 
 void	animate_idle_helper(t_corr p, t_corr f, t_data **i, int y)
 {
-	mlx_image_t	*l;
-	mlx_image_t	*mv;
+	void	*l;
+	void	*mv;
 
-	l = get_image(*i, LAVA);
-	mv = get_image(*i, (*i)->dir);
-	if (mlx_image_to_window((*i)->i, l, f.x * 64, f.y * 64) < 0 
-		|| mlx_image_to_window((*i)->i, mv, f.x * 64, y) < 0)
-		mlx_fail(*i);
-	// mlx_do_sync((*i)->mlx_ptr);
-	// usleep(30000);
-	if (mlx_image_to_window((*i)->i, l, p.x * 64, p.y * 64) < 0)
-		mlx_fail(*i);
+	l = get_image(*i, LAVA, 64);
+	mv = get_image(*i, (*i)->dir, 64);
+	mlx_put_image_to_window((*i)->ptr, (*i)->win, l, f.x * 64, f.y * 64);
+	mlx_put_image_to_window((*i)->ptr, (*i)->win, mv, f.x * 64, y);
+	mlx_do_sync((*i)->ptr);
+	// usleep(10000);
+	mlx_put_image_to_window((*i)->ptr, (*i)->win, l, p.x * 64, p.y * 64);
 }
 
 void	animate_idle(t_corr p, t_corr f, t_data **i)

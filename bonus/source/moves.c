@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 20:42:54 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/15 23:19:38 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/17 02:10:24 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	move_up(t_data **info)
 		close_window(*info, EXIT_SUCCESS);
 	else
 		render_moves(to_f, to_f, (*info)->dir, &info);
+	(*info)->keyp = -1;
 }
 
 void	move_down(t_data **info)
@@ -50,6 +51,7 @@ void	move_down(t_data **info)
 		close_window(*info, EXIT_SUCCESS);
 	else
 		render_moves(to_f, to_f, (*info)->dir, &info);
+	(*info)->keyp = -1;
 }
 
 void	move_right(t_data **info)
@@ -70,6 +72,7 @@ void	move_right(t_data **info)
 		close_window(*info, EXIT_SUCCESS);
 	else
 		render_moves(to_f, to_f, P_R, &info);
+	(*info)->keyp = -1;
 }
 
 void	move_left(t_data **info)
@@ -90,4 +93,5 @@ void	move_left(t_data **info)
 		close_window(*info, EXIT_SUCCESS);
 	else
 		render_moves(to_f, to_f, P_L, &info);
+	(*info)->keyp = -1;
 }

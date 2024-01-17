@@ -6,13 +6,13 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 19:39:17 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/15 19:39:30 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/18 00:16:27 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long_bonus.h"
 
-void	mlx_fail(t_data	*i)
+int	mlx_fail(t_data	*i)
 {
 	int	j;
 
@@ -23,21 +23,49 @@ void	mlx_fail(t_data	*i)
 		j++;
 	}
 	free(i->map);
-	mini_printf(0, "something wrong happen");
-	exit(EXIT_FAILURE);
+	mlx_destroy_window(i->ptr, i->win);
+	mini_printf(0, "you Pressed"RED" X "RESET"button");
+	exit(0);
 }
 
-mlx_image_t	*get_image(t_data *i, char *path)
+void	mlX_start_engine(t_data *i, t_img *m)
 {
-	mlx_texture_t	*t;
-	mlx_image_t		*im;
+	i->ptr = mlx_init();
+	if (!i->ptr)
+	{
+		mini_printf(0, RED"ERROR\nmlx init fail"RESET);
+		close_window(i, EXIT_FAILURE);
+	}
+	i->win = mlx_new_window(i->ptr, m->width, m->height, "so_long");
+	if (!i->win)
+	{
+		mini_printf(0, RED"ERROR\nmlx new window fail"RESET);
+		close_window(i, EXIT_FAILURE);
+	}
+}
 
-	t = mlx_load_png((const char *)path);
-	if (!t)
+void	*get_image(t_data *i, char *path, int size)
+{
+	void	*img;
+
+	img = mlx_xpm_file_to_image(i->ptr, path, &size, &size);
+	if (!img)
+	{
+		mini_printf(0, RED"asset LOAD fail!!!"RESET);
 		close_window(i, EXIT_FAILURE);
-	im = mlx_texture_to_image(i->i, t);
-	if (!im)
-		close_window(i, EXIT_FAILURE);
-	mlx_delete_texture(t);
-	return (im);
+	}
+	return (img);
+}
+
+int	frames(t_data *i)
+{
+	if (i->keyp == UP)
+		move_up(&i);
+	else if (i->keyp == DOWN)
+		move_down(&i);
+	else if (i->keyp == LEFT)
+		move_left(&i);
+	else if (i->keyp == RIGHT)
+		move_right(&i);
+	return (i->keyp);
 }

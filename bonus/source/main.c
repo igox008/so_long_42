@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 10:54:54 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/15 20:26:19 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/17 00:06:30 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,28 +36,28 @@ int	coin_count(char **map)
 
 void	fill_animation_path(t_data **i)
 {
-	(*i)->anim_r[0] = "bonus/assets/animation/Walk0_right.png";
-	(*i)->anim_r[1] = "bonus/assets/animation/Walk1_right.png";
-	(*i)->anim_r[2] = "bonus/assets/animation/Walk2_right.png";
-	(*i)->anim_r[3] = "bonus/assets/animation/Walk3_right.png";
-	(*i)->anim_r[4] = "bonus/assets/animation/Walk4_right.png";
-	(*i)->anim_r[5] = "bonus/assets/animation/Walk5_right.png";
-	(*i)->anim_r[6] = "bonus/assets/animation/Walk6_right.png";
-	(*i)->anim_r[7] = "bonus/assets/animation/Walk7_right.png";
-	(*i)->anim_r[8] = "bonus/assets/animation/Walk0_left.png";
-	(*i)->anim_r[9] = "bonus/assets/animation/Walk1_left.png";
-	(*i)->anim_r[10] = "bonus/assets/animation/Walk2_left.png";
-	(*i)->anim_r[11] = "bonus/assets/animation/Walk3_left.png";
-	(*i)->anim_r[12] = "bonus/assets/animation/Walk4_left.png";
-	(*i)->anim_r[13] = "bonus/assets/animation/Walk5_left.png";
-	(*i)->anim_r[14] = "bonus/assets/animation/Walk6_left.png";
-	(*i)->anim_r[15] = "bonus/assets/animation/Walk7_left.png";
-	(*i)->anim_r[16] = "bonus/assets/animation/Idle_0.png";
-	(*i)->anim_r[17] = "bonus/assets/animation/Idle_1.png";
-	(*i)->anim_r[18] = "bonus/assets/animation/Idle_2.png";
-	(*i)->anim_r[19] = "bonus/assets/animation/Idle_3.png";
-	(*i)->anim_r[20] = "bonus/assets/animation/Idle_4.png";
-	(*i)->anim_r[21] = "bonus/assets/animation/Idle_5.png";
+	(*i)->anim_r[0] = "bonus/assets/animation/Walk0_right.xpm";
+	(*i)->anim_r[1] = "bonus/assets/animation/Walk1_right.xpm";
+	(*i)->anim_r[2] = "bonus/assets/animation/Walk2_right.xpm";
+	(*i)->anim_r[3] = "bonus/assets/animation/Walk3_right.xpm";
+	(*i)->anim_r[4] = "bonus/assets/animation/Walk4_right.xpm";
+	(*i)->anim_r[5] = "bonus/assets/animation/Walk5_right.xpm";
+	(*i)->anim_r[6] = "bonus/assets/animation/Walk6_right.xpm";
+	(*i)->anim_r[7] = "bonus/assets/animation/Walk7_right.xpm";
+	(*i)->anim_r[8] = "bonus/assets/animation/Walk0_left.xpm";
+	(*i)->anim_r[9] = "bonus/assets/animation/Walk1_left.xpm";
+	(*i)->anim_r[10] = "bonus/assets/animation/Walk2_left.xpm";
+	(*i)->anim_r[11] = "bonus/assets/animation/Walk3_left.xpm";
+	(*i)->anim_r[12] = "bonus/assets/animation/Walk4_left.xpm";
+	(*i)->anim_r[13] = "bonus/assets/animation/Walk5_left.xpm";
+	(*i)->anim_r[14] = "bonus/assets/animation/Walk6_left.xpm";
+	(*i)->anim_r[15] = "bonus/assets/animation/Walk7_left.xpm";
+	(*i)->anim_r[16] = "bonus/assets/animation/Idle_0.xpm";
+	(*i)->anim_r[17] = "bonus/assets/animation/Idle_1.xpm";
+	(*i)->anim_r[18] = "bonus/assets/animation/Idle_2.xpm";
+	(*i)->anim_r[19] = "bonus/assets/animation/Idle_3.xpm";
+	(*i)->anim_r[20] = "bonus/assets/animation/Idle_4.xpm";
+	(*i)->anim_r[21] = "bonus/assets/animation/Idle_5.xpm";
 	(*i)->anim_r[22] = NULL;
 }
 

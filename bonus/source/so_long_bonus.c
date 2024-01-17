@@ -6,36 +6,33 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 22:21:23 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/16 18:39:52 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/18 00:17:40 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long_bonus.h"
 
-void	listen_hook(mlx_key_data_t keyp, void *p)
+int	listen_hook(int keyp, t_data *t)
 {
-	t_data	*t;
-
-	t = (t_data *)p;
 	if (t->key_pressed == 0)
-		t->dir = "bonus/assets/player_right.png";
-	if (keyp.key == MLX_KEY_ESCAPE  && keyp.action == MLX_PRESS)
+		t->dir = "bonus/assets/player_right.xpm";
+	if (keyp == ESC)
 	{
 		mini_printf(0, GREEN"you pressed ESC"RESET);
 		close_window(t, EXIT_SUCCESS);
 	}
-	else if (keyp.key == MLX_KEY_W && keyp.action == MLX_PRESS)
-		move_up(&t);
-	else if (keyp.key == MLX_KEY_S && keyp.action == MLX_PRESS)
-		move_down(&t);
-	else if (keyp.key == MLX_KEY_D && keyp.action == MLX_PRESS)
-		move_right(&t);
-	else if (keyp.key == MLX_KEY_A && keyp.action == MLX_PRESS)
-		move_left(&t);
+	else if (keyp == UP)
+		t->keyp = UP;
+	else if (keyp == DOWN)
+		t->keyp = DOWN;
+	else if (keyp == RIGHT)
+		t->keyp = RIGHT;
+	else if (keyp == LEFT)
+		t->keyp = LEFT;
 	if (t->coins <= 0)
 		open_exit(t);
-	t->dir = dir_getter(keyp.key, t);
-	// return (NULL);
+	t->dir = dir_getter(keyp, t);
+	return (keyp);
 }
 
 int	close_window(t_data *f, int status)
@@ -43,9 +40,10 @@ int	close_window(t_data *f, int status)
 	int	i;
 
 	i = 0;
-	// mlx_destroy_window(f->mlx_ptr, f->mlx_win);
-	mlx_close_window(f->i);
-	mlx_terminate(f->i);
+	if (f->ptr != NULL && f->win != NULL)
+		mlx_destroy_window(f->ptr, f->win);
+	// mlx_close_window(f->i);
+	// mlx_terminate(f->i);
 	while (f->map[i])
 	{
 		free(f->map[i]);
@@ -60,7 +58,7 @@ void	fill_win(t_img *img, t_data *f, int x_max, int y_max)
 {
 	int			i;
 	int			j;
-	mlx_image_t	*pic;
+	void		*pic;
 	char		*pic_path;
 
 	i = 0;
@@ -69,15 +67,14 @@ void	fill_win(t_img *img, t_data *f, int x_max, int y_max)
 		j = 0;
 		while (j < x_max)
 		{
-			if (mlx_image_to_window(f->i, img->img, j, i) < 0)
-				close_window(f, EXIT_FAILURE);
+			mlx_put_image_to_window(f->ptr, f->win, img->lava, j, i);
 			pic_path = asset_getter(f->map);
 			if (pic_path != NULL)
 			{
-				pic = get_image(f, pic_path);
-				if ((!pic && mini_printf(0, "fix assets names"))
-					|| mlx_image_to_window(f->i, pic, j, i) < 0)
+				pic = get_image(f, pic_path, 64);
+				if (!pic && mini_printf(0, "fix assets names"))
 					close_window(f, EXIT_FAILURE);
+				mlx_put_image_to_window(f->ptr, f->win, pic, j, i);
 			}
 			j += 64;
 		}
@@ -101,9 +98,11 @@ t_img	initial_check(int ac, char **av, t_data *i)
 	i->size = 64;
 	i->moves_count = 0;
 	i->coins = coin_count(i->map);
-	img.path = "mandatory/assets/lava.png";
+	img.path = "bonus/assets/lava.xpm";
 	img.height = 64 * boundaries.y;
 	img.width = 64 * boundaries.x;
+	i->keyp = -1;
+	i->cur = clock();
 	fill_animation_path(&i);
 	return (img);
 }
@@ -117,13 +116,12 @@ int	main(int ac, char **av)
 	img = initial_check(ac, av, &info);
 	if (!info.map)
 		return (0);
-	info.i = mlx_init(img.width, img.height, "so_long", FALSE);
-	if (!info.i)
-		mlx_fail(&info);
-	img.img = get_image(&info, img.path);
+	mlX_start_engine(&info, &img);
+	img.lava = get_image(&info, img.path, 64);
 	fill_win(&img, &info, img.width, img.height);
-	mlx_key_hook(info.i, listen_hook, &info);
-	// mlx_hook(info.i->window, 17, 0, close_window, &info);
-	mlx_loop(info.i);
+	mlx_hook(info.win, 17, 1L<<0, mlx_fail, &info);
+	mlx_key_hook(info.win, listen_hook, &info);
+	mlx_loop_hook(info.ptr, frames, &info);
+	mlx_loop(info.ptr);
 }
 

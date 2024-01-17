@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 01:10:47 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/15 23:15:45 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/17 00:55:24 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,47 +15,44 @@
 void	open_exit(t_data *info)
 {
 	t_corr	cor;
-	mlx_image_t	*exit;
-	mlx_image_t	*lava;
+	void	*exit;
+	void	*lava;
 
 	cor = get_xy(info->map, 'E');
-	lava = get_image(info, LAVA);
-	exit = get_image(info, EXIT_OPEN);
-	if (mlx_image_to_window(info->i, lava, cor.x * 64, cor.y * 64) < 0
-		|| mlx_image_to_window(info->i, exit, cor.x * 64, cor.y * 64) < 0)
-		mlx_fail(info);
+	lava = get_image(info, LAVA, 64);
+	exit = get_image(info, EXIT_OPEN, 64);
+	mlx_put_image_to_window(info->ptr, info->win, lava, cor.x * 64, cor.y * 64);
+	mlx_put_image_to_window(info->ptr, info->win, exit, cor.x * 64, cor.y * 64);
 }
 
 char	*dir_getter(int key, t_data *f)
 {
-	if (key == MLX_KEY_D)
-		return ("bonus/assets/player_right.png");
-	else if (key == MLX_KEY_A)
-		return ("bonus/assets/player_left.png");
+	if (key == RIGHT)
+		return ("bonus/assets/player_right.xpm");
+	else if (key == LEFT)
+		return ("bonus/assets/player_left.xpm");
 	return (f->dir);
 }
 
-void	render_moves(t_corr p, t_corr f, char *pl, t_data ***info)
+void	render_moves(t_corr p, t_corr f, char *pl, t_data ***i)
 {
-	mlx_image_t	*player;
-	mlx_image_t	*floor;
+	void	*player;
+	void	*floor;
 
-	player = get_image(**info, pl);
-	floor = get_image(**info, LAVA);
-	if ((**info)->map[p.y][p.x] == 'C' && (**info)->coins--)
-		if (mlx_image_to_window((**info)->i, floor, p.x * 64, p.y * 64) < 0)
-			mlx_fail(**info);
-	if (mlx_image_to_window((**info)->i, floor, f.x * 64, f.y * 64) < 0
-		|| mlx_image_to_window((**info)->i, player, p.x * 64, p.y * 64) < 0)
-		mlx_fail(**info);
-	(**info)->map[f.y][f.x] = '0';
-	(**info)->map[p.y][p.x] = 'P';
+	player = get_image(**i, pl, 64);
+	floor = get_image(**i, LAVA, 64);
+	if ((**i)->map[p.y][p.x] == 'C' && (**i)->coins--)
+		mlx_put_image_to_window((**i)->ptr, (**i)->win, floor, p.x * 64, p.y * 64);
+	mlx_put_image_to_window((**i)->ptr,(**i)->win, floor, f.x * 64, f.y * 64);
+	mlx_put_image_to_window((**i)->ptr,(**i)->win, player, p.x * 64, p.y * 64);
+	(**i)->map[f.y][f.x] = '0';
+	(**i)->map[p.y][p.x] = 'P';
 	if (p.x != f.x || p.y != f.y)
 	{
-		(**info)->moves_count++;
-		mini_printf((**info)->moves_count, NULL);
+		(**i)->moves_count++;
+		mini_printf((**i)->moves_count, NULL);
 	}
-	(**info)->key_pressed++;
+	(**i)->key_pressed++;
 }
 
 void	animate_right(t_corr p, t_corr f, t_data **info)

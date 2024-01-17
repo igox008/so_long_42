@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 22:21:23 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/15 13:20:48 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/17 00:30:08 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,6 @@ int	main(int ac, char **av)
 	img.img = get_image(&info, img.path);
 	fill_win(&img, &info, img.width, img.height);
 	mlx_key_hook(info.i, listen_hook, &info);
-	// mlx_hook(info.i->window, 17, 0, close_window, &info);
+	// mlx_hook(info.i.window, 17, 0, close_window, &info);
 	mlx_loop(info.i);
 }

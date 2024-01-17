@@ -1,6 +1,6 @@
 CC = cc
 OFALGS = -g -Wall -Wextra -Werror
-CFALGS = -framework Cocoa -framework OpenGL -framework IOKit
+CFALGS = -lmlx -framework OpenGL -framework AppKit -g
 RM = rm -rf
 NAME = so_long
 BNAME = so_long_bonus
@@ -10,7 +10,6 @@ BLIBDIR = bonus/libft-custom
 LIB = libft.a
 INC = -I$(LIBDIR) -L$(LIBDIR) -lft
 BINC = -I$(BLIBDIR) -L$(BLIBDIR) -lft
-MLX42 = libmlx42.a -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/"
 SRC = mandatory/source/main.c mandatory/source/parser.c mandatory/source/utils.c mandatory/source/way_to_win.c \
 	mandatory/source/so_long.c mandatory/source/moves.c mandatory/source/utils2.c
 
@@ -26,9 +25,9 @@ all : $(NAME)
 bonus : $(BNAME)
 
 $(NAME) : $(OBJ) mk_lib
-	$(CC) $(CFALGS) $(OFALGS) $(MLX42) $(OBJ) $(INC) -o $(NAME)
+	$(CC) $(CFALGS) $(OBJ) $(INC) -o $(NAME)
 $(BNAME) : $(BOBJ) mk_lib_bonus
-	$(CC) $(CFALGS) $(OFALGS) $(MLX42) $(BOBJ) $(BINC) -o $(BNAME)
+	$(CC) $(CFALGS) $(BOBJ) $(BINC) -o $(BNAME)
 
 %.o : %.c
 	$(CC) $(OFALGS) -c $< -o $@

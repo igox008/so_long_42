@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 09:02:09 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/16 00:33:20 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/18 00:05:59 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 # include "libft-custom/get_next_line.h"
 # include <stdio.h>
 # include <stdlib.h>
-// # include <mlx.h>
-# include "../MLX42/include/MLX42/MLX42.h"
-# include "../MLX42/include/MLX42/MLX42_Int.h"
+# include <mlx.h>
+// # include "../MLX42/include/MLX42/MLX42.h"
+// # include "../MLX42/include/MLX42/MLX42_Int.h"
 # include <time.h>
 
 typedef int	t_boolean;
@@ -34,17 +34,17 @@ typedef int	t_boolean;
 # define TRUE 1
 # define FALSE 0
 
-# define P_R "bonus/assets/player_right.png"
-# define P_L "bonus/assets/player_left.png"
-# define EXIT_OPEN "bonus/assets/exit_open.png"
-# define EXIT_CLOSE "bonus/assets/exit_close.png"
-# define WALL "bonus/assets/wall.png"
-# define COIN "bonus/assets/coin.png"
-# define LAVA "bonus/assets/lava.png"
-# define ENEMY_L "bonus/assets/enemy_left.png"
-# define ENEMY_R "bonus/assets/enemy_right.png"
-# define ENEMY_U "bonus/assets/enemy_up.png"
-# define ENEMY_D "bonus/assets/enemy_down.png"
+# define P_R "bonus/assets/player_right.xpm"
+# define P_L "bonus/assets/player_left.xpm"
+# define EXIT_OPEN "bonus/assets/exit_open.xpm"
+# define EXIT_CLOSE "bonus/assets/exit_close.xpm"
+# define WALL "bonus/assets/wall.xpm"
+# define COIN "bonus/assets/coin.xpm"
+# define LAVA "bonus/assets/lava.xpm"
+# define ENEMY_L "bonus/assets/enemy_left.xpm"
+# define ENEMY_R "bonus/assets/enemy_right.xpm"
+# define ENEMY_U "bonus/assets/enemy_up.xpm"
+# define ENEMY_D "bonus/assets/enemy_down.xpm"
 
 # define RESET "\x1b[0m"
 # define BOLD "\x1b[1m"
@@ -57,11 +57,17 @@ typedef int	t_boolean;
 # define CYAN "\x1b[36m"
 # define BG_BLUE "\x1b[44m"
 
+typedef struct
+{
+	void	*ptr;
+	void	*win;
+}	my_mlx;
+
 typedef struct s_data
 {
-	mlx_t	*i;
-	void	*mlx_ptr;
-	void	*mlx_win;
+	my_mlx	t;
+	void	*ptr;
+	void	*win;
 	void	*lava;
 	int		moves_count;
 	int		size;
@@ -70,25 +76,18 @@ typedef struct s_data
 	char	*dir;
 	int		key_pressed;
 	char	*anim_r[23];
+	int		keyp;
 	clock_t	cur;
 	clock_t	end;
 	int		queue;
 }	t_data;
-// typedef struct s_data
-// {
-// 	mlx_t	*i;
-// 	int		moves_count;
-// 	int		size;
-// 	int		coins;
-// 	char	**map;
-// }	
+
 typedef struct s_img
 {
 	char			*path;
 	int				width;
 	int				height;
-	mlx_texture_t	*txt;
-	mlx_image_t		*img;
+	void			*lava;
 }	t_img;
 
 typedef struct s_corr
@@ -134,7 +133,9 @@ void		animate_left(t_corr p, t_corr f, t_data **info);
 void		animate(int x, t_corr f, char *pt, t_data **i);
 void		animate_idle(t_corr p, t_corr f, t_data **i);
 int			move_enemy(t_data *info);
-mlx_image_t	*get_image(t_data *i, char *path);
-void		mlx_fail(t_data	*i);
+void		*get_image(t_data *i, char *path, int size);
+int			mlx_fail(t_data	*i);
+void		mlX_start_engine(t_data *i, t_img *m);
+int			frames(t_data *i);
 
 #endif
