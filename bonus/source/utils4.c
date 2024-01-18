@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 19:39:17 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/18 00:16:27 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/18 04:22:23 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ void	*get_image(t_data *i, char *path, int size)
 	img = mlx_xpm_file_to_image(i->ptr, path, &size, &size);
 	if (!img)
 	{
+		// printf("%s\n", path);
 		mini_printf(0, RED"asset LOAD fail!!!"RESET);
 		close_window(i, EXIT_FAILURE);
 	}
@@ -59,6 +60,12 @@ void	*get_image(t_data *i, char *path, int size)
 
 int	frames(t_data *i)
 {
+	if (clock() > i->cur + 100000)
+	{
+		enemy_to_move(i);
+		i->cur = clock();
+		mlx_do_sync(i->ptr);
+	}
 	if (i->keyp == UP)
 		move_up(&i);
 	else if (i->keyp == DOWN)

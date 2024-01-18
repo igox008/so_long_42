@@ -15,7 +15,7 @@ SRC = mandatory/source/main.c mandatory/source/parser.c mandatory/source/utils.c
 
 BSRC = bonus/source/main.c bonus/source/parser.c bonus/source/utils.c bonus/source/way_to_win.c \
 	bonus/source/so_long_bonus.c bonus/source/moves.c bonus/source/utils2.c bonus/source/utils3.c bonus/source/utils4.c \
-	# bonus/source/enemy.c
+	bonus/source/enemy.c
 
 OBJ = $(SRC:.c=.o)
 

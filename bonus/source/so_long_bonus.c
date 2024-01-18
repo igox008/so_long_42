@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 22:21:23 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/18 00:17:40 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/18 04:25:35 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ t_img	initial_check(int ac, char **av, t_data *i)
 	img.height = 64 * boundaries.y;
 	img.width = 64 * boundaries.x;
 	i->keyp = -1;
+	i->key_pressed = 0;
 	i->cur = clock();
 	fill_animation_path(&i);
 	return (img);

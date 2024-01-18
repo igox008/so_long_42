@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 03:04:57 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/18 00:18:24 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/18 02:20:54 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	animate(int x, t_corr f, char *pt, t_data **i)
 	mlx_put_image_to_window((*i)->ptr, (*i)->win, l, f.x * 64, f.y * 64);
 	mlx_put_image_to_window((*i)->ptr, (*i)->win, mv, x, f.y * 64);
 	mlx_do_sync((*i)->ptr);
-	// usleep(10000);
+	// usleep(30000);
 	if (ft_strnstr(pt, "left", 200))
 		mlx_put_image_to_window((*i)->ptr, (*i)->win, l, (f.x - 1) * 64,f.y * 64);
 	else

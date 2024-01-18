@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 09:02:09 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/18 00:05:59 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/18 05:01:24 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,8 @@ typedef int	t_boolean;
 # define CYAN "\x1b[36m"
 # define BG_BLUE "\x1b[44m"
 
-typedef struct
-{
-	void	*ptr;
-	void	*win;
-}	my_mlx;
-
 typedef struct s_data
 {
-	my_mlx	t;
 	void	*ptr;
 	void	*win;
 	void	*lava;
@@ -78,8 +71,6 @@ typedef struct s_data
 	char	*anim_r[23];
 	int		keyp;
 	clock_t	cur;
-	clock_t	end;
-	int		queue;
 }	t_data;
 
 typedef struct s_img
@@ -132,10 +123,10 @@ void		animate_right(t_corr p, t_corr f, t_data **info);
 void		animate_left(t_corr p, t_corr f, t_data **info);
 void		animate(int x, t_corr f, char *pt, t_data **i);
 void		animate_idle(t_corr p, t_corr f, t_data **i);
-int			move_enemy(t_data *info);
 void		*get_image(t_data *i, char *path, int size);
 int			mlx_fail(t_data	*i);
 void		mlX_start_engine(t_data *i, t_img *m);
 int			frames(t_data *i);
+void		enemy_to_move(t_data *i);
 
 #endif
