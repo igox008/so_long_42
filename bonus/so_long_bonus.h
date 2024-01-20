@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 09:02:09 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/20 07:07:57 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/20 07:51:20 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_data
 	int		keyp;
 	int		t_exit;
 	char	d;
+	pthread_t	tid;
 	t_corr	bound;
 	t_corr	old_ene;
 	clock_t	enemy;
