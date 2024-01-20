@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 01:10:47 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/17 00:55:24 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/19 12:20:23 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	open_exit(t_data *info)
 	exit = get_image(info, EXIT_OPEN, 64);
 	mlx_put_image_to_window(info->ptr, info->win, lava, cor.x * 64, cor.y * 64);
 	mlx_put_image_to_window(info->ptr, info->win, exit, cor.x * 64, cor.y * 64);
+	mlx_destroy_image(info->ptr, lava);
+	mlx_destroy_image(info->ptr, exit);
 }
 
 char	*dir_getter(int key, t_data *f)
@@ -53,6 +55,8 @@ void	render_moves(t_corr p, t_corr f, char *pl, t_data ***i)
 		mini_printf((**i)->moves_count, NULL);
 	}
 	(**i)->key_pressed++;
+	mlx_destroy_image((**i)->ptr, floor);
+	mlx_destroy_image((**i)->ptr, player);
 }
 
 void	animate_right(t_corr p, t_corr f, t_data **info)

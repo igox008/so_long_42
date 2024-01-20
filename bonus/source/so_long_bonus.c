@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 22:21:23 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/18 04:25:35 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/20 07:11:28 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ int	listen_hook(int keyp, t_data *t)
 		t->keyp = RIGHT;
 	else if (keyp == LEFT)
 		t->keyp = LEFT;
-	if (t->coins <= 0)
-		open_exit(t);
 	t->dir = dir_getter(keyp, t);
 	return (keyp);
 }
@@ -42,78 +40,75 @@ int	close_window(t_data *f, int status)
 	i = 0;
 	if (f->ptr != NULL && f->win != NULL)
 		mlx_destroy_window(f->ptr, f->win);
-	// mlx_close_window(f->i);
-	// mlx_terminate(f->i);
 	while (f->map[i])
 	{
 		free(f->map[i]);
 		i++;
 	}
 	free(f->map);
+	f->t_exit = 1;
 	exit(status);
 	return (0);
 }
 
 void	fill_win(t_img *img, t_data *f, int x_max, int y_max)
 {
-	int			i;
-	int			j;
+	t_corr		c;
 	void		*pic;
 	char		*pic_path;
 
-	i = 0;
-	while (i < y_max)
+	c.y = 0;
+	while (c.y < y_max)
 	{
-		j = 0;
-		while (j < x_max)
+		c.x = 0;
+		while (c.x < x_max)
 		{
-			mlx_put_image_to_window(f->ptr, f->win, img->lava, j, i);
+			mlx_put_image_to_window(f->ptr, f->win, img->lava, c.x, c.y);
 			pic_path = asset_getter(f->map);
 			if (pic_path != NULL)
 			{
 				pic = get_image(f, pic_path, 64);
 				if (!pic && mini_printf(0, "fix assets names"))
 					close_window(f, EXIT_FAILURE);
-				mlx_put_image_to_window(f->ptr, f->win, pic, j, i);
+				mlx_put_image_to_window(f->ptr, f->win, pic, c.x, c.y);
+				mlx_destroy_image(f->ptr, pic);
 			}
-			j += 64;
+			c.x += 64;
 		}
-		i += 64;
+		c.y += 64;
 	}
 }
 
 t_img	initial_check(int ac, char **av, t_data *i)
 {
-	t_corr	boundaries;
 	t_img	img;
 
 	i->map = parse_main(ac, av);
 	if (!i->map)
 		return (img.height = -1, img);
-	boundaries = width_height(i->map);
-	if (boundaries.x > 129 || boundaries.y > 127)
-		return (arr_fail(i->map, boundaries.y), img.width = -1,
-			ft_putendl_fd(UNDERLINE RED"mlx cannot handle this map"RESET, 1),
-			img);
+	i->bound = width_height(i->map);
 	i->size = 64;
 	i->moves_count = 0;
 	i->coins = coin_count(i->map);
 	img.path = "bonus/assets/lava.xpm";
-	img.height = 64 * boundaries.y;
-	img.width = 64 * boundaries.x;
+	img.height = 64 * i->bound.y;
+	img.width = 64 * i->bound.x;
 	i->keyp = -1;
 	i->key_pressed = 0;
 	i->cur = clock();
+	i->enemy = clock();
+	i->t_exit = 0;
+	i->d = 'U';
 	fill_animation_path(&i);
 	return (img);
 }
-
-
+// void	leak(){system("leaks so_long_bonus");}
 int	main(int ac, char **av)
 {
-	t_data	info;
-	t_img	img;	
-	
+	t_data		info;
+	t_img		img;
+	pthread_t	tid;
+	// atexit(leak);
 	img = initial_check(ac, av, &info);
 	if (!info.map)
 		return (0);
@@ -123,6 +118,7 @@ int	main(int ac, char **av)
 	mlx_hook(info.win, 17, 1L<<0, mlx_fail, &info);
 	mlx_key_hook(info.win, listen_hook, &info);
 	mlx_loop_hook(info.ptr, frames, &info);
+	if (pthread_create(&tid, NULL, enemy_call, &info) != 0)
+		return (close_window(&info, EXIT_FAILURE), mini_printf(0, RED"ERROR"RESET));
 	mlx_loop(info.ptr);
 }
-

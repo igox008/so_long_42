@@ -6,65 +6,100 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 06:15:42 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/18 04:26:41 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/20 07:12:28 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long_bonus.h"
 
-char *enemy_dir(int index)
+char	*enemy_think(t_data *i, t_corr ene)
 {
-	static int	t[10240];
+	static int  x;
 
-	if (t[index] > 3)
-		t[index] = 0;
-	if (t[index] == 0)
-		return (ENEMY_D);
-	else if (t[index] == 1)
+	if (ene.x - 1 > 0 && i->map[ene.y][ene.x - 1] != '0')
+		x = 0;
+	if (ene.x + 1 < i->bound.x && i->map[ene.y][ene.x + 1] == '0' && x == 0){
+		i->d = 'R';
 		return (ENEMY_R);
-	else if (t[index] == 2)
-		return (ENEMY_U);
-	else if (t[index] == 3)
+	}
+	else if (ene.x - 1 > 0 && i->map[ene.y][ene.x - 1] == '0') {
+		x = 1;
+		i->d = 'L';
 		return (ENEMY_L);
-	t[index]++;
+	}
+	i->d = 'U';
+	return (ENEMY_U);
+}
+
+void	enemy_move(t_data *i, t_corr ene)
+{
+	char	*path;
+	int		x;
+
+	path = enemy_think(i, ene);
+	if (ft_strnstr(path, "_left", 100))
+		x = (ene.x - 1);
+	else if (ft_strnstr(path, "_right", 100))
+		x = (ene.x + 1);
+	else
+	{
+		x = ene.x;
+		return ;
+	}
+	i->map[ene.y][ene.x] = '0';
+	i->map[ene.y][x] = 'N';
+}
+
+void	enemy_engine(t_data *i)
+{
+	t_corr	cor;
+
+	cor.y = 0;
+	while (i->map[cor.y])
+	{
+		cor.x = 0;
+		while (i->map[cor.y][cor.x])
+		{
+			if (i->map[cor.y][cor.x] == 'N')
+			{
+				enemy_move(i, cor);
+				i->old_ene = cor;
+			}
+			cor.x++;
+			if (i->d == 'R' && cor.x + 1 < i->bound.x)
+				cor.x++;
+		}
+		// printf("%s\n", i->map[cor.y]);
+		cor.y++;
+	}
+}
+
+void	*enemy_call(void *t)
+{
+	t_data	*i;
+
+	i = (t_data *)t;
+	i->old_ene.x = -1;
+	i->old_ene.y = -1;
+	while (1)
+	{
+		if (i->t_exit == 1)
+			pthread_exit(NULL);
+		enemy_engine(i);
+		usleep(150000);
+	}
 	return (NULL);
 }
 
-void	rush_enemy(t_data *i, t_corr c, char *path)
+void	render_enemy(t_data *i)
 {
 	void	*lava;
 	void	*enemy;
-
-	lava = get_image(i, LAVA, 64);
-	enemy = get_image(i, path, 64);
-	mlx_put_image_to_window(i->ptr, i->win, lava, c.x * 64, c.y * 64);
-	mlx_put_image_to_window(i->ptr, i->win, enemy, c.x * 64, c.y * 64);
-	mlx_do_sync(i->ptr);
-}
-void	animate_enemy(t_data *i, t_corr c, int t)
-{
-	char	*path;
-
-	path = enemy_dir(t);
-	if (!path)
-		return;
-	if (!ft_strncmp(path, ENEMY_R, 100))
-		rush_enemy(i, c, path);
-	else if (!ft_strncmp(path, ENEMY_D, 100))
-		rush_enemy(i, c, path);
-	else if (!ft_strncmp(path, ENEMY_U, 100))
-		rush_enemy(i, c, path);
-	else if (!ft_strncmp(path, ENEMY_L, 100))
-		rush_enemy(i, c, path);
-}
-
-void	enemy_to_move(t_data *i)
-{
 	t_corr	c;
-	int		t;
 
 	c.y = 0;
-	t = 0;
+	lava = get_image(i, LAVA, 64);
+	enemy = get_image(i, ENEMY_D, 64);
 	while (i->map[c.y])
 	{
 		c.x = 0;
@@ -72,11 +107,15 @@ void	enemy_to_move(t_data *i)
 		{
 			if (i->map[c.y][c.x] == 'N')
 			{
-				animate_enemy(i, c, t);
-				t++;
+				if (i->old_ene.x != -1)
+					mlx_put_image_to_window(i->ptr, i->win, lava, i->old_ene.x * 64, i->old_ene.y * 64);
+				mlx_put_image_to_window(i->ptr, i->win, lava, c.x * 64, c.y * 64);
+				mlx_put_image_to_window(i->ptr, i->win, enemy, c.x * 64, c.y * 64);
 			}
 			c.x++;
 		}
 		c.y++;
 	}
+	// mlx_destroy_image(i->ptr, lava);
+	// mlx_destroy_image(i->ptr, enemy);
 }

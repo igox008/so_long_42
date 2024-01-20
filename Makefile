@@ -31,7 +31,6 @@ $(BNAME) : $(BOBJ) mk_lib_bonus
 
 %.o : %.c
 	$(CC) $(OFALGS) -c $< -o $@
-
 mk_lib :
 	@make -C $(LIBDIR)
 	@echo "making custom-lib"

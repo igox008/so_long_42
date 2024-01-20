@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 03:04:57 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/18 02:20:54 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/20 07:01:24 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,17 @@ void	animate(int x, t_corr f, char *pt, t_data **i)
 	mlx_put_image_to_window((*i)->ptr, (*i)->win, l, f.x * 64, f.y * 64);
 	mlx_put_image_to_window((*i)->ptr, (*i)->win, mv, x, f.y * 64);
 	mlx_do_sync((*i)->ptr);
-	// usleep(30000);
+	while (clock() < (*i)->cur + 10000)
+	{
+		render_enemy(*i);
+	}
 	if (ft_strnstr(pt, "left", 200))
 		mlx_put_image_to_window((*i)->ptr, (*i)->win, l, (f.x - 1) * 64,f.y * 64);
 	else
 		mlx_put_image_to_window((*i)->ptr, (*i)->win, l, (f.x + 1) * 64,f.y * 64);
+	mlx_destroy_image((*i)->ptr, l);
+	mlx_destroy_image((*i)->ptr, mv);
+	(*i)->cur = clock();
 }
 
 void	animate_idle_helper(t_corr p, t_corr f, t_data **i, int y)
@@ -39,8 +45,14 @@ void	animate_idle_helper(t_corr p, t_corr f, t_data **i, int y)
 	mlx_put_image_to_window((*i)->ptr, (*i)->win, l, f.x * 64, f.y * 64);
 	mlx_put_image_to_window((*i)->ptr, (*i)->win, mv, f.x * 64, y);
 	mlx_do_sync((*i)->ptr);
-	// usleep(10000);
+	while (clock() < (*i)->cur + 10000)
+	{
+		render_enemy(*i);
+	}
 	mlx_put_image_to_window((*i)->ptr, (*i)->win, l, p.x * 64, p.y * 64);
+	mlx_destroy_image((*i)->ptr, l);
+	mlx_destroy_image((*i)->ptr, mv);
+	(*i)->cur = clock();
 }
 
 void	animate_idle(t_corr p, t_corr f, t_data **i)

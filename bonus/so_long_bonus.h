@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 09:02:09 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/18 05:01:24 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/20 07:07:57 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <mlx.h>
+# include <pthread.h>
 // # include "../MLX42/include/MLX42/MLX42.h"
 // # include "../MLX42/include/MLX42/MLX42_Int.h"
 # include <time.h>
@@ -57,6 +58,12 @@ typedef int	t_boolean;
 # define CYAN "\x1b[36m"
 # define BG_BLUE "\x1b[44m"
 
+typedef struct s_corr
+{
+	int	x;
+	int	y;
+}	t_corr;
+
 typedef struct s_data
 {
 	void	*ptr;
@@ -70,6 +77,11 @@ typedef struct s_data
 	int		key_pressed;
 	char	*anim_r[23];
 	int		keyp;
+	int		t_exit;
+	char	d;
+	t_corr	bound;
+	t_corr	old_ene;
+	clock_t	enemy;
 	clock_t	cur;
 }	t_data;
 
@@ -81,11 +93,7 @@ typedef struct s_img
 	void			*lava;
 }	t_img;
 
-typedef struct s_corr
-{
-	int	x;
-	int	y;
-}	t_corr;
+
 
 typedef struct s_map
 {
@@ -94,6 +102,7 @@ typedef struct s_map
 }	t_map;
 
 void		incr(int *arr, char c);
+t_boolean	check_last(char *all);
 char		**special_handler(int i, char *all);
 t_boolean	check_ext(char *str);
 t_boolean	map_chek(char **str, int last);
@@ -127,6 +136,7 @@ void		*get_image(t_data *i, char *path, int size);
 int			mlx_fail(t_data	*i);
 void		mlX_start_engine(t_data *i, t_img *m);
 int			frames(t_data *i);
-void		enemy_to_move(t_data *i);
+void		*enemy_call(void *t);
+void		render_enemy(t_data *i);
 
 #endif

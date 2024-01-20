@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/25 11:51:27 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/11 00:59:03 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/19 08:25:46 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	flood(char **map, size_t x, size_t y, size_t rows)
 	{
 		map[y][x] = '1';
 		flood(map, x, y + 1, rows);
-		flood(map, x, y - 1, rows);
+		flood(map, x, y - 1, rows); 
 		flood(map, x + 1, y, rows);
 		flood(map, x - 1, y, rows);
 	}

@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 19:39:17 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/18 04:22:23 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/20 07:11:03 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	mlx_fail(t_data	*i)
 	free(i->map);
 	mlx_destroy_window(i->ptr, i->win);
 	mini_printf(0, "you Pressed"RED" X "RESET"button");
+	i->t_exit = 1;
 	exit(0);
 }
 
@@ -60,12 +61,8 @@ void	*get_image(t_data *i, char *path, int size)
 
 int	frames(t_data *i)
 {
-	if (clock() > i->cur + 100000)
-	{
-		enemy_to_move(i);
-		i->cur = clock();
-		mlx_do_sync(i->ptr);
-	}
+	if (i->coins <= 0)
+		open_exit(i);
 	if (i->keyp == UP)
 		move_up(&i);
 	else if (i->keyp == DOWN)
@@ -74,5 +71,23 @@ int	frames(t_data *i)
 		move_left(&i);
 	else if (i->keyp == RIGHT)
 		move_right(&i);
+	render_enemy(i);
+	if (clock() < i->enemy + 150000)
+	{
+		mlx_do_sync(i->ptr);
+		i->enemy = clock();
+	}
 	return (i->keyp);
+}
+
+t_boolean	check_last(char *all)
+{
+	int	i;
+
+	i = ft_strlen(all);
+	if (i > 0)
+		i--;
+	if (all[i] == '\n')
+		return (FALSE);
+	return (TRUE);
 }
