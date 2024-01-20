@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 06:15:42 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/20 07:12:28 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/20 07:50:53 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	*enemy_call(void *t)
 	i->old_ene.y = -1;
 	while (1)
 	{
-		if (i->t_exit == 1)
+		if (i->t_exit == 1 && fprintf(stderr,"Ff\n"))
 			pthread_exit(NULL);
 		enemy_engine(i);
 		usleep(150000);
@@ -97,6 +97,8 @@ void	render_enemy(t_data *i)
 	void	*enemy;
 	t_corr	c;
 
+	if (i->t_exit == 1)
+		
 	c.y = 0;
 	lava = get_image(i, LAVA, 64);
 	enemy = get_image(i, ENEMY_D, 64);
@@ -116,6 +118,6 @@ void	render_enemy(t_data *i)
 		}
 		c.y++;
 	}
-	// mlx_destroy_image(i->ptr, lava);
-	// mlx_destroy_image(i->ptr, enemy);
+	mlx_destroy_image(i->ptr, lava);
+	mlx_destroy_image(i->ptr, enemy);
 }

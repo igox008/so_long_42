@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 22:21:23 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/20 07:11:28 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/20 08:00:28 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ int	close_window(t_data *f, int status)
 	}
 	free(f->map);
 	f->t_exit = 1;
+	pthread_kill(f->tid, 0);
 	exit(status);
 	return (0);
 }
@@ -107,7 +108,6 @@ int	main(int ac, char **av)
 {
 	t_data		info;
 	t_img		img;
-	pthread_t	tid;
 	// atexit(leak);
 	img = initial_check(ac, av, &info);
 	if (!info.map)
@@ -116,9 +116,10 @@ int	main(int ac, char **av)
 	img.lava = get_image(&info, img.path, 64);
 	fill_win(&img, &info, img.width, img.height);
 	mlx_hook(info.win, 17, 1L<<0, mlx_fail, &info);
-	mlx_key_hook(info.win, listen_hook, &info);
+	// mlx_key_hook(info.win, listen_hook, &info);
+	mlx_hook(info.win, 3, 1L<<0, listen_hook, &info);
 	mlx_loop_hook(info.ptr, frames, &info);
-	if (pthread_create(&tid, NULL, enemy_call, &info) != 0)
+	if (pthread_create(&info.tid, NULL, enemy_call, &info) != 0)
 		return (close_window(&info, EXIT_FAILURE), mini_printf(0, RED"ERROR"RESET));
 	mlx_loop(info.ptr);
 }

@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/15 19:39:17 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/20 07:11:03 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/20 08:03:26 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	mlx_fail(t_data	*i)
 	mlx_destroy_window(i->ptr, i->win);
 	mini_printf(0, "you Pressed"RED" X "RESET"button");
 	i->t_exit = 1;
+	pthread_kill(i->tid, 0);
 	exit(0);
 }
 
