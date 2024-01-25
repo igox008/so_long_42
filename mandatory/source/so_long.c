@@ -6,32 +6,28 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 22:21:23 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/17 00:30:08 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/25 19:50:56 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../so_long.h"
 
-// int	f(int key, t_data *t)
-void	listen_hook(mlx_key_data_t keyp, void *p)
+int	listen_hook(int keyp, t_data *t)
 {
-	t_data	*t;
-
-	t = (t_data *)p;
-	if (keyp.key == MLX_KEY_ESCAPE  && keyp.action == MLX_PRESS)
+	if (keyp == ESC)
 	{
-		mini_printf(0, GREEN"you pressed ESC"RESET);
+		mini_printf(1, GREEN"you pressed ESC"RESET);
 		close_window(t, EXIT_SUCCESS);
 	}
-	else if (keyp.key == MLX_KEY_W && keyp.action == MLX_PRESS)
-		move_up(&t);
-	else if (keyp.key == MLX_KEY_S && keyp.action == MLX_PRESS)
-		move_down(&t);
-	else if (keyp.key == MLX_KEY_D && keyp.action == MLX_PRESS)
-		move_right(&t);
-	else if (keyp.key == MLX_KEY_A && keyp.action == MLX_PRESS)
-		move_left(&t);
-	// return (NULL);
+	else if (keyp == UP || keyp == 126)
+		move_up(t);
+	else if (keyp == DOWN || keyp == 125)
+		move_down(t);
+	else if (keyp == RIGHT || keyp == 124)
+		move_right(t);
+	else if (keyp == LEFT || keyp == 123)
+		move_left(t);
+	return (keyp);
 }
 
 int	close_window(t_data *f, int status)
@@ -39,9 +35,8 @@ int	close_window(t_data *f, int status)
 	int	i;
 
 	i = 0;
-	// mlx_destroy_window(f->mlx_ptr, f->mlx_win);
-	mlx_close_window(f->i);
-	mlx_terminate(f->i);
+	if (f->ptr != NULL && f->win != NULL)
+		mlx_destroy_window(f->ptr, f->win);
 	while (f->map[i])
 	{
 		free(f->map[i]);
@@ -56,7 +51,7 @@ void	fill_win(t_img *img, t_data *f, int x_max, int y_max)
 {
 	int			i;
 	int			j;
-	mlx_image_t	*pic;
+	void		*pic;
 	char		*pic_path;
 
 	i = 0;
@@ -65,15 +60,13 @@ void	fill_win(t_img *img, t_data *f, int x_max, int y_max)
 		j = 0;
 		while (j < x_max)
 		{
-			if (mlx_image_to_window(f->i, img->img, j, i) < 0)
-				close_window(f, EXIT_FAILURE);
+			mlx_put_image_to_window(f->ptr, f->win, img->img, j, i);
 			pic_path = asset_getter(f->map);
 			if (pic_path != NULL)
 			{
-				pic = get_image(f, pic_path);
-				if ((!pic && mini_printf(0, "fix assets names"))
-					|| mlx_image_to_window(f->i, pic, j, i) < 0)
-					close_window(f, EXIT_FAILURE);
+				pic = get_image(f, pic_path, 64);
+				mlx_put_image_to_window(f->ptr, f->win, pic, j, i);
+				mlx_destroy_image(f->ptr, pic);
 			}
 			j += 64;
 		}
@@ -90,34 +83,27 @@ t_img	initial_check(int ac, char **av, t_data *i)
 	if (!i->map)
 		return (img.height = -1, img);
 	boundaries = width_height(i->map);
-	if (boundaries.x > 129 || boundaries.y > 127)
-		return (arr_fail(i->map, boundaries.y), img.width = -1,
-			ft_putendl_fd(UNDERLINE RED"mlx cannot handle this map"RESET, 1),
-			img);
 	i->size = 64;
 	i->moves_count = 0;
 	i->coins = coin_count(i->map);
-	img.path = "mandatory/assets/lava.png";
+	img.path = "mandatory/textures/lava.xpm";
 	img.height = 64 * boundaries.y;
 	img.width = 64 * boundaries.x;
 	return (img);
 }
 
-
 int	main(int ac, char **av)
 {
 	t_data	info;
-	t_img	img;	
-	
+	t_img	img;
+
 	img = initial_check(ac, av, &info);
 	if (!info.map)
-		return (0);
-	info.i = mlx_init(img.width, img.height, "so_long", FALSE);
-	if (!info.i)
-		mlx_fail(&info);
-	img.img = get_image(&info, img.path);
+		exit(2);
+	mlx_start_engine(&info, &img);
+	img.img = get_image(&info, img.path, 64);
 	fill_win(&img, &info, img.width, img.height);
-	mlx_key_hook(info.i, listen_hook, &info);
-	// mlx_hook(info.i.window, 17, 0, close_window, &info);
-	mlx_loop(info.i);
+	mlx_hook(info.win, 17, 1L << 0, mlx_fail, &info);
+	mlx_hook(info.win, 2, 1L << 0, listen_hook, &info);
+	mlx_loop(info.ptr);
 }

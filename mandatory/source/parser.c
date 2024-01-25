@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 10:08:20 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/13 12:50:26 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/25 19:55:07 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_boolean	check_ext(char *str)
 			t = i;
 		i++;
 	}
-	if (ft_strncmp(str + t, ".ber", 100) == 0)
+	if (ft_strncmp(str + t, ".ber", t) == 0)
 		return (TRUE);
 	return (FALSE);
 }

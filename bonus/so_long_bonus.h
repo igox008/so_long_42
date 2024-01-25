@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 09:02:09 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/20 07:51:20 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/25 19:30:51 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,11 @@
 # define SO_LONG_BONUS_H
 
 # include <fcntl.h>
-# include <math.h>
 # include "libft-custom/libft.h"
 # include "libft-custom/get_next_line.h"
 # include <stdio.h>
 # include <stdlib.h>
 # include <mlx.h>
-# include <pthread.h>
-// # include "../MLX42/include/MLX42/MLX42.h"
-// # include "../MLX42/include/MLX42/MLX42_Int.h"
 # include <time.h>
 
 typedef int	t_boolean;
@@ -35,17 +31,15 @@ typedef int	t_boolean;
 # define TRUE 1
 # define FALSE 0
 
-# define P_R "bonus/assets/player_right.xpm"
-# define P_L "bonus/assets/player_left.xpm"
-# define EXIT_OPEN "bonus/assets/exit_open.xpm"
-# define EXIT_CLOSE "bonus/assets/exit_close.xpm"
-# define WALL "bonus/assets/wall.xpm"
-# define COIN "bonus/assets/coin.xpm"
-# define LAVA "bonus/assets/lava.xpm"
-# define ENEMY_L "bonus/assets/enemy_left.xpm"
-# define ENEMY_R "bonus/assets/enemy_right.xpm"
-# define ENEMY_U "bonus/assets/enemy_up.xpm"
-# define ENEMY_D "bonus/assets/enemy_down.xpm"
+# define P_R "bonus/textures/player_right.xpm"
+# define P_L "bonus/textures/player_left.xpm"
+# define EXIT_OPEN "bonus/textures/exit_open.xpm"
+# define EXIT_CLOSE "bonus/textures/exit_close.xpm"
+# define WALL "bonus/textures/wall.xpm"
+# define COIN "bonus/textures/coin.xpm"
+# define LAVA "bonus/textures/lava.xpm"
+# define ENEMY_ON "bonus/textures/enemy_on.xpm"
+# define ENEMY_OFF "bonus/textures/enemy_off.xpm"
 
 # define RESET "\x1b[0m"
 # define BOLD "\x1b[1m"
@@ -72,18 +66,16 @@ typedef struct s_data
 	int		moves_count;
 	int		size;
 	int		coins;
+	int		ene_cnt;
 	char	**map;
 	char	*dir;
 	int		key_pressed;
-	char	*anim_r[23];
+	char	*anim_r[26];
+	void	*moves;
+	void	*moves_re;
 	int		keyp;
-	int		t_exit;
 	char	d;
-	pthread_t	tid;
 	t_corr	bound;
-	t_corr	old_ene;
-	clock_t	enemy;
-	clock_t	cur;
 }	t_data;
 
 typedef struct s_img
@@ -93,8 +85,6 @@ typedef struct s_img
 	int				height;
 	void			*lava;
 }	t_img;
-
-
 
 typedef struct s_map
 {
@@ -118,26 +108,29 @@ char		**parse_main(int ac, char **av);
 t_corr		width_height(char **map);
 void		fill_win(t_img *img, t_data *f, int x_max, int y_max);
 char		*asset_getter(char	**map);
-void		move_up(t_data **info);
-void		move_down(t_data **info);
-void		move_right(t_data **info);
-void		move_left(t_data **info);
-int			mini_printf(int n, char *str);
-int			coin_count(char **map);
+void		move_up(t_data *info);
+void		move_down(t_data *info);
+void		move_right(t_data *info);
+void		move_left(t_data *info);
+int			mini_printf(int fd, char *str);
+int			c_count(char **map, char c);
 int			close_window(t_data *f, int status);
 void		open_exit(t_data *info);
 char		*dir_getter(int key, t_data *f);
-void		render_moves(t_corr p, t_corr f, char *pl, t_data ***info);
+void		render_moves(t_corr p, t_corr f, char *pl, t_data *info);
 void		fill_animation_path(t_data **i);
-void		animate_right(t_corr p, t_corr f, t_data **info);
-void		animate_left(t_corr p, t_corr f, t_data **info);
-void		animate(int x, t_corr f, char *pt, t_data **i);
-void		animate_idle(t_corr p, t_corr f, t_data **i);
+void		animate_right(t_corr p, t_corr f, t_data *info);
+void		animate_left(t_corr p, t_corr f, t_data *info);
+void		animate(int x, t_corr f, char *pt, t_data *i);
+void		animate_idle(t_corr p, t_corr f, t_data *i);
 void		*get_image(t_data *i, char *path, int size);
 int			mlx_fail(t_data	*i);
-void		mlX_start_engine(t_data *i, t_img *m);
+void		mlx_start_engine(t_data *i, t_img *m);
 int			frames(t_data *i);
-void		*enemy_call(void *t);
-void		render_enemy(t_data *i);
+void		he_lose(t_data *i, int x, int y);
+void		get_rest(t_data *i);
+void		he_won(t_data *i, int x, int y);
+int			print_moves(t_data *i);
+void		final(t_data *i, t_boolean won);
 
 #endif

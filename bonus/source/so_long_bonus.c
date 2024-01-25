@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 22:21:23 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/20 08:00:28 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/25 19:38:48 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 int	listen_hook(int keyp, t_data *t)
 {
 	if (t->key_pressed == 0)
-		t->dir = "bonus/assets/player_right.xpm";
+		t->dir = "bonus/textures/player_right.xpm";
 	if (keyp == ESC)
 	{
-		mini_printf(0, GREEN"you pressed ESC"RESET);
+		mini_printf(1, GREEN"you pressed ESC"RESET);
 		close_window(t, EXIT_SUCCESS);
 	}
-	else if (keyp == UP)
+	else if (keyp == UP || keyp == 126)
 		t->keyp = UP;
-	else if (keyp == DOWN)
+	else if (keyp == DOWN || keyp == 125)
 		t->keyp = DOWN;
-	else if (keyp == RIGHT)
+	else if (keyp == RIGHT || keyp == 124)
 		t->keyp = RIGHT;
-	else if (keyp == LEFT)
+	else if (keyp == LEFT || keyp == 123)
 		t->keyp = LEFT;
 	t->dir = dir_getter(keyp, t);
 	return (keyp);
@@ -46,8 +46,6 @@ int	close_window(t_data *f, int status)
 		i++;
 	}
 	free(f->map);
-	f->t_exit = 1;
-	pthread_kill(f->tid, 0);
 	exit(status);
 	return (0);
 }
@@ -69,8 +67,6 @@ void	fill_win(t_img *img, t_data *f, int x_max, int y_max)
 			if (pic_path != NULL)
 			{
 				pic = get_image(f, pic_path, 64);
-				if (!pic && mini_printf(0, "fix assets names"))
-					close_window(f, EXIT_FAILURE);
 				mlx_put_image_to_window(f->ptr, f->win, pic, c.x, c.y);
 				mlx_destroy_image(f->ptr, pic);
 			}
@@ -90,36 +86,34 @@ t_img	initial_check(int ac, char **av, t_data *i)
 	i->bound = width_height(i->map);
 	i->size = 64;
 	i->moves_count = 0;
-	i->coins = coin_count(i->map);
-	img.path = "bonus/assets/lava.xpm";
+	i->coins = c_count(i->map, 'C');
+	i->ene_cnt = c_count(i->map, 'N');
+	img.path = "bonus/textures/lava.xpm";
 	img.height = 64 * i->bound.y;
 	img.width = 64 * i->bound.x;
 	i->keyp = -1;
 	i->key_pressed = 0;
-	i->cur = clock();
-	i->enemy = clock();
-	i->t_exit = 0;
 	i->d = 'U';
 	fill_animation_path(&i);
 	return (img);
 }
-// void	leak(){system("leaks so_long_bonus");}
+
 int	main(int ac, char **av)
 {
 	t_data		info;
 	t_img		img;
-	// atexit(leak);
+
 	img = initial_check(ac, av, &info);
 	if (!info.map)
 		return (0);
-	mlX_start_engine(&info, &img);
+	mlx_start_engine(&info, &img);
 	img.lava = get_image(&info, img.path, 64);
 	fill_win(&img, &info, img.width, img.height);
-	mlx_hook(info.win, 17, 1L<<0, mlx_fail, &info);
-	// mlx_key_hook(info.win, listen_hook, &info);
-	mlx_hook(info.win, 3, 1L<<0, listen_hook, &info);
+	mlx_hook(info.win, 17, 1L << 0, mlx_fail, &info);
+	mlx_hook(info.win, 2, 1L << 0, listen_hook, &info);
 	mlx_loop_hook(info.ptr, frames, &info);
-	if (pthread_create(&info.tid, NULL, enemy_call, &info) != 0)
-		return (close_window(&info, EXIT_FAILURE), mini_printf(0, RED"ERROR"RESET));
+	info.moves = get_image(&info, "bonus/textures/score.xpm", 64);
+	info.moves_re = get_image(&info, "bonus/textures/score_re.xpm", 64);
+	print_moves(&info);
 	mlx_loop(info.ptr);
 }

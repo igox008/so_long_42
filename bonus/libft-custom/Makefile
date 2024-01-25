@@ -6,7 +6,7 @@
 #    By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/02 17:30:14 by alaassir          #+#    #+#              #
-#    Updated: 2024/01/11 00:51:27 by alaassir         ###   ########.fr        #
+#    Updated: 2024/01/25 18:00:24 by alaassir         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ $(NAME) : $(OBJ)
 bonus: $(BONUS_OBJ)
 	@$(AR) $(NAME) $(BONUS_OBJ)
 
-%.o: %.c libft.h
+%.o: %.c libft.h get_next_line.h
 	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
