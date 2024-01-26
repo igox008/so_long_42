@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 03:04:57 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/25 19:40:12 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/26 04:42:33 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,4 +109,5 @@ void	he_lose(t_data *i, int x, int y)
 		t++;
 	}
 	final(i, FALSE);
+	close_window(i, 0);
 }
