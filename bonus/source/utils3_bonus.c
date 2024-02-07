@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/13 03:04:57 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/26 04:42:33 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/26 20:36:27 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ char	**special_handler(int i, char *all)
 	{
 		mini_printf(2, UNDERLINE RED"ERROR INVALID MAP"RESET);
 	}
+	exit(EXIT_FAILURE);
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 09:19:53 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/26 05:39:58 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/26 20:19:54 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,20 @@ void	get_rest(t_data *i)
 	i->anim_r[22] = "bonus/textures/Jump_2.xpm";
 	i->anim_r[23] = "bonus/textures/Jump_3.xpm";
 	i->anim_r[24] = "bonus/textures/Jump_4.xpm";
-	i->anim_r[25] = NULL;
+	i->anim_r[25] = "bonus/textures/coin.xpm";
+	i->anim_r[26] = "bonus/textures/enemy_off.xpm";
+	i->anim_r[27] = "bonus/textures/enemy_on.xpm";
+	i->anim_r[28] = "bonus/textures/exit_close.xpm";
+	i->anim_r[29] = "bonus/textures/exit_open.xpm";
+	i->anim_r[30] = "bonus/textures/lose.xpm";
+	i->anim_r[31] = "bonus/textures/player_left.xpm";
+	i->anim_r[32] = "bonus/textures/player_right.xpm";
+	i->anim_r[33] = "bonus/textures/player_right.xpm";
+	i->anim_r[34] = "bonus/textures/score_re.xpm";
+	i->anim_r[35] = "bonus/textures/score.xpm";
+	i->anim_r[36] = "bonus/textures/wall.xpm";
+	i->anim_r[37] = "bonus/textures/won.xpm";
+	i->anim_r[38] = NULL;
 }
 
 void	he_won(t_data *i, int x, int y)
@@ -86,5 +99,19 @@ void	final(t_data *i, t_boolean won)
 		mlx_put_image_to_window(i->ptr, i->win, txt, x, y);
 		mlx_do_sync(i->ptr);
 		usleep(900000);
+	}
+}
+
+void	check_txt(t_data *t)
+{
+	int		i;
+	void	*img;
+
+	i = 0;
+	while (t->anim_r[i] != NULL)
+	{
+		img = get_image(t, t->anim_r[i], 64);
+		mlx_destroy_image(t->ptr, img);
+		i++;
 	}
 }

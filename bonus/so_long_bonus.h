@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 09:02:09 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/26 05:40:21 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/26 20:38:46 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ typedef struct s_data
 	char	**map;
 	char	*dir;
 	int		key_pressed;
-	char	*anim_r[26];
+	char	*anim_r[39];
 	void	*moves;
 	void	*moves_re;
 	int		keyp;
@@ -132,5 +132,6 @@ void		get_rest(t_data *i);
 void		he_won(t_data *i, int x, int y);
 int			print_moves(t_data *i);
 void		final(t_data *i, t_boolean won);
+void		check_txt(t_data *t);
 
 #endif

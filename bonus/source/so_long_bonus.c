@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/26 22:21:23 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/26 05:39:46 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/26 21:19:09 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	main(int ac, char **av)
 	if (!info.map)
 		return (0);
 	mlx_start_engine(&info, &img);
+	check_txt(&info);
 	img.lava = get_image(&info, img.path, 64);
 	fill_win(&img, &info, img.width, img.height);
 	mlx_hook(info.win, 17, 1L << 0, mlx_fail, &info);

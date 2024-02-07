@@ -18,7 +18,7 @@ BG_WHITE=\033[47m
 
 CC = cc
 OFALGS = -Wall -Wextra -Werror
-CFALGS = -lmlx -framework OpenGL -framework AppKit -g
+CFALGS = -lmlx -framework OpenGL -framework AppKit
 RM = rm -rf
 NAME = so_long
 BNAME = so_long_bonus
