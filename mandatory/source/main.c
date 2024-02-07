@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/24 10:54:54 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/25 19:57:34 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/26 21:58:26 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char	**map_maker(char *str, size_t *last)
 	int		i;
 
 	fd = open(str, O_RDONLY);
-	if (fd == -1 && mini_printf(2, RED"cannot open this file"RESET))
+	if (fd == -1 && mini_printf(0, RED"cannot open this file"RESET))
 		return (NULL);
 	(1) && (all = NULL, line = get_next_line(fd), i = 0);
 	while (line)
@@ -86,7 +86,9 @@ char	**map_maker(char *str, size_t *last)
 		(1) && ((*last)++, i++);
 		line = get_next_line(fd);
 	}
-	if (!check_last(all))
+	if (!check_last(all) && mini_printf(0, RED"map error"RESET))
+		return (free(all), NULL);
+	if (close(fd) != 0)
 		return (free(all), NULL);
 	map = ft_split(all, '\n');
 	return (free(all), all = NULL, map);

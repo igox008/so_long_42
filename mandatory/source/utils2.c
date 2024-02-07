@@ -6,7 +6,7 @@
 /*   By: alaassir <alaassir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 22:54:48 by alaassir          #+#    #+#             */
-/*   Updated: 2024/01/25 19:42:16 by alaassir         ###   ########.fr       */
+/*   Updated: 2024/01/26 20:33:30 by alaassir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char	**special_handler(int i, char *all)
 		mini_printf(2, RED UNDERLINE"mlx can't rander all this"RESET);
 	else
 		mini_printf(2, UNDERLINE RED"ERROR INVALID MAP"RESET);
+	exit(EXIT_FAILURE);
 	return (NULL);
 }
 
